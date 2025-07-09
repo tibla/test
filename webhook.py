@@ -7,7 +7,7 @@ screenshot_path = "screenshot.png"
 pyautogui.screenshot(screenshot_path)
 
 # Время создания скриншота
-now = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S:%MS")
+now = datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")
 description = f"Скриншот сделан: {now}"
 
 # Отправка в Discord
